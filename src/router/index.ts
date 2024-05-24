@@ -80,19 +80,6 @@ const router = createRouter({
       meta: { title: 'Register', forceLayout: Layout.Blank, checkAuth: true },
     },
     {
-      path: '/verify',
-      name: 'Verify',
-      component: () => import('@/views/Auth/Login.vue'),
-      meta: { title: 'Verify Identity', forceLayout: Layout.Blank, checkAuth: true },
-      beforeEnter: (to, from, next) => {
-        if (to.query.school_id) {
-          next()
-        } else {
-          next({ name: 'Login' })
-        }
-      },
-    },
-    {
       path: '/logout',
       name: 'Logout',
       redirect: '/login',
