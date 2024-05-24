@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">booklend</string>
+    <string name="title_activity_main">booklend</string>
+    <string name="package_name">com.booklend.app</string>
+    <string name="custom_url_scheme">com.booklend.app</string>
+</resources>
