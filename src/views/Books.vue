@@ -164,6 +164,13 @@ const returnBook = async (book: Book) => {
       })
 
       if (returnCode) {
+        Swal.fire({
+          title: 'Returning Book...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading()
+          },
+        })
         const response = await userPost('/student-return-book', {
           borrowed_book_id: book.id,
           return_code: returnCode,
