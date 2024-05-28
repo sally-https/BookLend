@@ -10,6 +10,7 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
 import App from "@/App.vue"
 import router from "@/router"
 import { type Locales, type MessageSchema, getI18NConf } from "@/lang/config"
+import './registerServiceWorker'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

@@ -7,14 +7,13 @@
         </transition>
       </RouterView>
     </component>
-
     <SplashScreen :show="loading" />
     <SearchDialog v-if="isLogged" />
   </Provider>
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref, watch, type Component } from 'vue'
+import { computed, onBeforeMount, ref, watch, type Component, onMounted } from 'vue'
 import { useMainStore } from '@/stores/main'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
@@ -30,17 +29,14 @@ import '@/assets/scss/index.scss'
 
 const router = useRouter()
 const loading = ref(true)
-
 const layoutComponents = {
   VerticalNav,
   HorizontalNav,
   Blank,
 }
-
 const themeStore = useThemeStore()
 const mainStore = useMainStore()
 const authStore = useAuthStore()
-
 const forceLayout = ref<Layout | null>(null)
 const layout = computed<Layout>(() => themeStore.layout)
 const forceRefresh = computed<number>(() => mainStore.forceRefresh)
@@ -66,9 +62,34 @@ router.afterEach((route) => {
   checkForcedLayout(route)
 })
 
+let deferredPrompt: any = null
+
+function handleBeforeInstallPrompt(event: Event) {
+  event.preventDefault()
+  deferredPrompt = event
+  showInstallPrompt()
+}
+
+function showInstallPrompt() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt()
+    deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt')
+      } else {
+        console.log('User dismissed the install prompt')
+      }
+      deferredPrompt = null
+    })
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+})
+
 onBeforeMount(() => {
   checkForcedLayout(useRoute())
-
   setTimeout(() => {
     loading.value = false
   }, 500)
